@@ -1,0 +1,537 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
+</head>
+<body>
+<title>Sita-Raam</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Italiana&family=Karla:ital,wght@0,400;0,500;0,700;1,400&family=DM+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: one calm column, a dawn-sky header, the daily 3-6-9 ritual first, then intentions, gratitude, and what has arrived. */
+:root{
+  --sky:#efe9f4; --paper:#fbf9fc; --ink:#2e2140; --muted:#6f6380; --line:#ddd3e6;
+  --gold:#a9781f; --gold-soft:#f3e6c8; --plum:#6b3f8f; --good:#2f7a5a;
+  --display:"Italiana","Didot","Bodoni 72",Georgia,serif;
+  --body:"Karla",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"DM Mono",ui-monospace,Menlo,monospace;
+  --halo:radial-gradient(120% 90% at 85% 0%,#f8e7c9 0%,rgba(248,231,201,0) 55%),radial-gradient(90% 80% at 0% 10%,#e3d6f0 0%,rgba(227,214,240,0) 60%);
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --sky:#17121f; --paper:#201a2b; --ink:#efe8f6; --muted:#a99cba; --line:#3a3049;
+  --gold:#e0b45e; --gold-soft:#3a2f1c; --plum:#c79bea; --good:#6fcf9f;
+  --halo:radial-gradient(120% 90% at 85% 0%,#3b2c1a 0%,rgba(59,44,26,0) 55%),radial-gradient(90% 80% at 0% 10%,#2c2140 0%,rgba(44,33,64,0) 60%);
+  color-scheme:dark}}
+:root[data-theme="dark"]{
+  --sky:#17121f; --paper:#201a2b; --ink:#efe8f6; --muted:#a99cba; --line:#3a3049;
+  --gold:#e0b45e; --gold-soft:#3a2f1c; --plum:#c79bea; --good:#6fcf9f;
+  --halo:radial-gradient(120% 90% at 85% 0%,#3b2c1a 0%,rgba(59,44,26,0) 55%),radial-gradient(90% 80% at 0% 10%,#2c2140 0%,rgba(44,33,64,0) 60%);
+  color-scheme:dark}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{background:var(--sky);background-image:var(--halo);background-attachment:fixed;color:var(--ink);font:16px/1.55 var(--body);
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:28px 64px}
+.wrap{max-width:720px;margin:0 auto;display:flex;flex-direction:column;gap:40px}
+h1,h2{font-family:var(--display);font-weight:400;margin:0;text-wrap:balance;letter-spacing:.01em}
+h1{font-size:clamp(2.6rem,9vw,4rem);line-height:1}
+h2{font-size:2rem;line-height:1.1}
+.eyebrow{font:500 .72rem/1 var(--mono);text-transform:uppercase;letter-spacing:.14em;color:var(--muted)}
+.muted{color:var(--muted)}
+button,input,textarea,select{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.btn{border:1px solid var(--ink);background:var(--ink);color:var(--paper);border-radius:999px;padding:9px 18px;font-weight:500}
+.btn.ghost{background:transparent;color:var(--ink);border-color:var(--line)}
+.btn.ghost:hover{border-color:var(--ink)}
+.btn.small{padding:5px 12px;font-size:.85rem}
+.btn:disabled{opacity:.45;cursor:default}
+.linkish{border:0;background:none;padding:0;color:var(--plum);text-decoration:underline;text-underline-offset:3px;font-size:.88rem}
+input[type=text],textarea,select{width:100%;background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:10px 12px}
+textarea{resize:vertical;min-height:70px}
+section{display:flex;flex-direction:column;gap:16px}
+.sec-head{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap}
+
+/* header */
+header{display:flex;flex-direction:column;gap:14px}
+.sky-row{display:flex;gap:18px;flex-wrap:wrap;align-items:center}
+.moon{display:flex;gap:12px;align-items:center}
+.moon canvas{width:44px;height:44px;flex:none}
+.stats{display:flex;gap:28px;flex-wrap:wrap;margin-top:4px}
+.stat b{display:block;font:400 2rem/1 var(--display)}
+.stat span{font:.72rem var(--mono);text-transform:uppercase;letter-spacing:.12em;color:var(--muted)}
+.syncnote{font:.75rem var(--mono);color:var(--muted)}
+
+/* ritual card */
+.ritual{background:var(--paper);border:1px solid var(--line);border-radius:22px;padding:22px;display:flex;flex-direction:column;gap:18px;box-shadow:0 12px 40px -24px rgba(60,30,90,.35)}
+.periods{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.period{border:1px solid var(--line);background:transparent;border-radius:14px;padding:10px 8px;text-align:left;display:flex;flex-direction:column;gap:4px}
+.period[aria-pressed=true]{border-color:var(--gold);background:var(--gold-soft)}
+.period .n{font:400 1.6rem/1 var(--display)}
+.period .l{font:.7rem var(--mono);text-transform:uppercase;letter-spacing:.1em;color:var(--muted)}
+.period .c{font:.78rem var(--mono);color:var(--muted);font-variant-numeric:tabular-nums}
+.period.done .c{color:var(--good)}
+.phrase{font:400 1.55rem/1.25 var(--display);text-wrap:balance}
+.dots{display:flex;gap:8px;flex-wrap:wrap}
+.dot{width:16px;height:16px;border-radius:50%;border:1.5px solid var(--gold);transition:background .3s,transform .3s}
+.dot.on{background:var(--gold);transform:scale(1.1)}
+.write-row{display:flex;gap:8px}
+.write-row input{flex:1;min-width:0}
+.ritual-foot{display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:space-between}
+
+/* visualize */
+.viz{position:fixed;inset:0;background:var(--sky);background-image:var(--halo);z-index:50;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:28px;
+  padding:calc(24px + env(safe-area-inset-top,0px)) max(24px,env(safe-area-inset-right,0px)) calc(24px + env(safe-area-inset-bottom,0px)) max(24px,env(safe-area-inset-left,0px));text-align:center}
+.orb{width:min(56vw,240px);aspect-ratio:1;max-width:100%;border-radius:50%;background:radial-gradient(circle at 40% 35%,var(--gold-soft),var(--gold) 70%);opacity:.85;animation:breathe 8s ease-in-out infinite}
+@keyframes breathe{0%,100%{transform:scale(.72)}50%{transform:scale(1)}}
+.viz .phrase{max-width:28ch;font-size:1.9rem}
+.cue{font:.8rem var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+
+/* intentions */
+.composer{display:flex;flex-direction:column;gap:10px;border:1px dashed var(--line);border-radius:16px;padding:16px}
+.composer-row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.composer-row select{width:auto;flex:none}
+.suggest{display:flex;flex-direction:column;gap:6px}
+.chip{border:1px solid var(--line);background:var(--paper);border-radius:12px;padding:8px 12px;text-align:left;font-size:.95rem}
+.chip:hover{border-color:var(--gold)}
+.list{display:flex;flex-direction:column;gap:0;border-top:1px solid var(--line)}
+.item{display:grid;grid-template-columns:1fr auto;gap:6px 14px;padding:16px 0;border-bottom:1px solid var(--line)}
+.item .t{font-size:1.08rem;font-weight:500;min-width:0;overflow-wrap:anywhere}
+.item .meta{grid-column:1/-1;display:flex;gap:14px;flex-wrap:wrap;font:.76rem var(--mono);color:var(--muted)}
+.tag{font:.7rem var(--mono);text-transform:uppercase;letter-spacing:.08em;color:var(--plum)}
+.item .acts{display:flex;gap:6px;align-items:flex-start;flex-wrap:wrap;justify-content:flex-end}
+.item.focus .t::before{content:"◆ ";color:var(--gold)}
+.signs{grid-column:1/-1;display:flex;flex-direction:column;gap:8px;padding-left:14px;border-left:2px solid var(--gold-soft)}
+.signs ul{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:4px;font-size:.93rem}
+.signs li span{font:.72rem var(--mono);color:var(--muted);margin-right:8px}
+.editbox{grid-column:1/-1;display:flex;flex-direction:column;gap:10px}
+.examples{display:flex;flex-direction:column;gap:8px;padding:8px 0}
+.examples .chip{opacity:.85}
+
+/* gratitude */
+.grat{display:flex;flex-direction:column;gap:8px}
+.grat label{display:flex;gap:12px;align-items:center}
+.grat label span{font:400 1.4rem/1 var(--display);color:var(--gold);width:1.2em;flex:none}
+.grat input{min-width:0}
+
+/* arrived */
+.arrived .item .t{text-decoration:none}
+.arrived .badge{font:.72rem var(--mono);color:var(--good);text-transform:uppercase;letter-spacing:.1em}
+.empty{color:var(--muted);font-style:italic;padding:8px 0}
+
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(20px + env(safe-area-inset-bottom,0px));background:var(--ink);color:var(--paper);padding:10px 18px;border-radius:999px;font-size:.9rem;z-index:60;max-width:calc(100% - 32px)}
+@media (max-width:480px){.item{grid-template-columns:1fr}.item .acts{justify-content:flex-start}.ritual{padding:18px}}
+@media (prefers-reduced-motion:reduce){.orb{animation:none}.dot{transition:none}}
+</style>
+
+<div class="wrap">
+  <header>
+    <div class="eyebrow" id="today">Today</div>
+    <h1>Sita-Raam</h1>
+    <div class="sky-row">
+      <div class="moon"><canvas id="moonC" width="88" height="88" aria-hidden="true"></canvas>
+        <div><div id="moonName" style="font-weight:500">Moon</div><div class="muted" id="moonHint" style="font-size:.9rem"></div></div>
+      </div>
+    </div>
+    <div class="stats">
+      <div class="stat"><b id="stStreak">0</b><span>day 3-6-9 streak</span></div>
+      <div class="stat"><b id="stActive">0</b><span>intentions open</span></div>
+      <div class="stat"><b id="stSigns">0</b><span>signs noticed</span></div>
+      <div class="stat"><b id="stArrived">0</b><span>arrived</span></div>
+    </div>
+    <div class="syncnote" id="sync">Saved in this browser</div>
+  </header>
+
+  <section aria-labelledby="h-ritual">
+    <div class="sec-head"><h2 id="h-ritual">Today's 3‑6‑9</h2><span class="eyebrow">3 morning · 6 afternoon · 9 night</span></div>
+    <div class="ritual">
+      <div class="periods" id="periods"></div>
+      <div>
+        <div class="eyebrow" style="margin-bottom:8px">Your focus intention</div>
+        <div class="phrase" id="focusPhrase">Choose an intention below to practise.</div>
+        <button class="linkish" type="button" id="editFocus" style="margin-top:6px" hidden>Edit or rewrite this intention</button>
+      </div>
+      <div class="dots" id="dots" aria-live="polite"></div>
+      <form class="write-row" id="writeForm" autocomplete="off">
+        <label for="writeIn" class="eyebrow" hidden>Write it out</label>
+        <input type="text" id="writeIn" placeholder="Write your intention, then press Enter">
+        <button class="btn" type="submit">Write</button>
+      </form>
+      <div class="ritual-foot">
+        <span class="muted" id="ritualMsg" style="font-size:.92rem">Write it slowly. Feel it as already true.</span>
+        <button class="btn ghost small" type="button" id="vizBtn">Visualise for 60 seconds</button>
+      </div>
+    </div>
+  </section>
+
+  <section aria-labelledby="h-int">
+    <div class="sec-head"><h2 id="h-int">Intentions</h2><span class="eyebrow">present tense, felt, specific</span></div>
+    <form class="composer" id="newForm" autocomplete="off">
+      <label for="newText" class="eyebrow">A new intention</label>
+      <textarea id="newText" placeholder="I am living in a bright apartment by the water…"></textarea>
+      <div class="composer-row">
+        <label for="newCat" hidden>Area of life</label>
+        <select id="newCat">
+          <option>Love</option><option>Money</option><option>Career</option><option>Health</option><option>Home</option><option>Self</option><option>Creativity</option><option>Other</option>
+        </select>
+        <button class="btn" type="submit">Set intention</button>
+        <button class="btn ghost" type="button" id="shapeBtn">Rewrite for me</button>
+      </div>
+      <div class="suggest" id="suggest"></div>
+    </form>
+    <div class="list" id="intList"></div>
+  </section>
+
+  <section aria-labelledby="h-grat">
+    <div class="sec-head"><h2 id="h-grat">Three thanks</h2><span class="eyebrow" id="gratDate"></span></div>
+    <div class="grat">
+      <label for="g0"><span>i</span><input type="text" id="g0" placeholder="Something that went right today"></label>
+      <label for="g1"><span>ii</span><input type="text" id="g1" placeholder="Someone you're glad exists"></label>
+      <label for="g2"><span>iii</span><input type="text" id="g2" placeholder="Something you already have that you once wished for"></label>
+    </div>
+  </section>
+
+  <section aria-labelledby="h-arr" class="arrived">
+    <div class="sec-head"><h2 id="h-arr">Arrived</h2><span class="eyebrow">what came true</span></div>
+    <div class="list" id="arrList"></div>
+  </section>
+</div>
+
+<div class="viz" id="viz" hidden role="dialog" aria-modal="true" aria-label="Visualisation">
+  <div class="orb"></div>
+  <div class="phrase" id="vizPhrase"></div>
+  <div class="cue" id="vizCue">Breathe in</div>
+  <button class="btn ghost small" type="button" id="vizClose">End</button>
+</div>
+<div class="toast" id="toast" hidden></div>
+
+<script>
+(() => {
+const $ = id => document.getElementById(id);
+const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const dkey = (d = new Date()) => `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+const fmt = k => { const [y,m,d] = k.split('-').map(Number); return new Date(y,m-1,d).toLocaleDateString(undefined,{month:'short',day:'numeric',year:'numeric'}); };
+const daysBetween = (a,b) => Math.round((new Date(b+'T12:00') - new Date(a+'T12:00'))/864e5);
+const uid = () => Math.random().toString(36).slice(2,10) + Date.now().toString(36);
+const PERIODS = [{k:'m',n:3,l:'Morning'},{k:'a',n:6,l:'Afternoon'},{k:'n',n:9,l:'Night'}];
+
+/* ---------- state + storage ---------- */
+const state = { intentions:{items:[], focus:null}, journal:{days:{}} };
+const LS = 'sita-raam-v1';
+try { const s = JSON.parse(localStorage.getItem(LS) || 'null'); if (s) { Object.assign(state.intentions, s.intentions||{}); Object.assign(state.journal, s.journal||{}); } } catch {}
+const saveLocal = () => { try { localStorage.setItem(LS, JSON.stringify(state)); } catch {} };
+
+let refs = null; // {intentions: DocRef, journal: DocRef}
+const wq = { intentions:{dirty:false,busy:false,t:0}, journal:{dirty:false,busy:false,t:0} };
+function persist(name){
+  saveLocal();
+  if (!refs) return;
+  const q = wq[name]; q.dirty = true; clearTimeout(q.t); q.t = setTimeout(() => flush(name), 500);
+}
+async function flush(name){
+  const q = wq[name]; if (q.busy || !q.dirty) return;
+  q.busy = true; q.dirty = false;
+  try { await refs[name].set(JSON.parse(JSON.stringify(state[name]))); setSync('Saved to your account'); }
+  catch(e){ setSync(e && e.code === 'quota_exceeded' ? 'Storage is full. Delete old entries to keep saving.' : 'Could not save to your account. Kept in this browser.'); }
+  q.busy = false; if (q.dirty) flush(name);
+}
+const setSync = t => $('sync').textContent = t;
+
+async function connect(){
+  if (!window.claude?.use) return;
+  const [db, user] = await Promise.all([claude.use('db'), claude.use('user')]);
+  if (!db || !user) return;
+  const id = await user.id(); if (!id) return;
+  const base = `data/users/${id}`;
+  refs = { intentions: db.doc(`${base}/intentions`), journal: db.doc(`${base}/journal`) };
+  setSync('Connecting to your account…');
+  const timer = setTimeout(() => setSync('Your account is not reachable yet. Saving in this browser.'), 10000);
+  for (const name of ['intentions','journal']) {
+    let first = true;
+    refs[name].onSnapshot(snap => {
+      if (!snap.metadata.fromCache) clearTimeout(timer);
+      const q = wq[name];
+      if (!snap.exists) {
+        if (first && !snap.metadata.fromCache) { first = false; if (hasData(name)) persist(name); }
+        setSync('Saved to your account');
+        return;
+      }
+      first = false;
+      if (q.busy || q.dirty) return;
+      const d = snap.data();
+      state[name] = JSON.parse(JSON.stringify(d));
+      if (name === 'intentions') { state.intentions.items ||= []; }
+      else { state.journal.days ||= {}; }
+      saveLocal(); render();
+      setSync('Saved to your account');
+    }, () => { clearTimeout(timer); setSync('Account sync stopped. Saving in this browser.'); refs = null; });
+  }
+}
+const hasData = n => n === 'intentions' ? state.intentions.items.length > 0 : Object.keys(state.journal.days).length > 0;
+
+/* ---------- helpers ---------- */
+const today = () => dkey();
+function day(k = today()){ return state.journal.days[k] ||= { m:0, a:0, n:0, g:['','',''] }; }
+const peek = (k) => state.journal.days[k];
+const active = () => state.intentions.items.filter(i => !i.arrived);
+const focusItem = () => state.intentions.items.find(i => i.id === state.intentions.focus && !i.arrived) || active()[0] || null;
+const complete = d => d && d.m >= 3 && d.a >= 6 && d.n >= 9;
+function streak(){
+  let s = 0; const d = new Date();
+  if (!complete(peek(dkey(d)))) d.setDate(d.getDate()-1);
+  while (complete(peek(dkey(d)))) { s++; d.setDate(d.getDate()-1); }
+  return s;
+}
+let period = (() => { const h = new Date().getHours(); return h < 12 ? 'm' : h < 18 ? 'a' : 'n'; })();
+function toast(t){ const el = $('toast'); el.textContent = t; el.hidden = false; clearTimeout(toast.t); toast.t = setTimeout(() => el.hidden = true, 2600); }
+
+/* ---------- moon ---------- */
+function moon(){
+  const syn = 29.530588853, ref = Date.UTC(2000,0,6,18,14);
+  const age = (((Date.now() - ref)/864e5) % syn + syn) % syn;
+  const frac = age/syn, lit = (1 - Math.cos(2*Math.PI*frac))/2;
+  const names = [
+    [1.84,'New moon','Plant a new intention. Write it down tonight.'],
+    [5.53,'Waxing crescent','Take one small step toward what you set.'],
+    [9.22,'First quarter','Act through resistance. Commit again.'],
+    [12.91,'Waxing gibbous','Refine. Notice what is already moving.'],
+    [16.61,'Full moon','Give thanks and release what blocks you.'],
+    [20.30,'Waning gibbous','Share what you have received.'],
+    [23.99,'Last quarter','Let go of an old story about yourself.'],
+    [27.68,'Waning crescent','Rest. Clear space before the next new moon.'],
+    [syn,'New moon','Plant a new intention. Write it down tonight.']];
+  const [ ,name,hint] = names.find(n => age < n[0]);
+  $('moonName').textContent = `${name} · ${Math.round(lit*100)}% lit`;
+  $('moonHint').textContent = hint;
+  const c = $('moonC'), x = c.getContext('2d'), r = 40, cx = 44, cy = 44;
+  const cs = getComputedStyle(document.documentElement);
+  x.clearRect(0,0,88,88);
+  x.fillStyle = cs.getPropertyValue('--line'); x.beginPath(); x.arc(cx,cy,r,0,Math.PI*2); x.fill();
+  const gold = cs.getPropertyValue('--gold'), dark = cs.getPropertyValue('--line');
+  const waxing = frac < .5, k = Math.cos(2*Math.PI*frac); // 1 new → -1 full
+  x.fillStyle = gold; x.beginPath();
+  if (waxing) x.arc(cx,cy,r,-Math.PI/2,Math.PI/2); else x.arc(cx,cy,r,Math.PI/2,Math.PI*1.5);
+  x.closePath(); x.fill();
+  x.fillStyle = lit < .5 ? dark : gold;
+  x.beginPath(); x.ellipse(cx,cy,Math.max(.01,Math.abs(k)*r),r,0,0,Math.PI*2); x.fill();
+}
+
+/* ---------- render ---------- */
+function render(){
+  const d = peek(today()) || {m:0,a:0,n:0,g:['','','']};
+  const f = focusItem();
+  $('today').textContent = new Date().toLocaleDateString(undefined,{weekday:'long',month:'long',day:'numeric'});
+  $('stStreak').textContent = streak();
+  $('stActive').textContent = active().length;
+  $('stSigns').textContent = state.intentions.items.reduce((s,i) => s + (i.signs?.length||0), 0);
+  $('stArrived').textContent = state.intentions.items.filter(i => i.arrived).length;
+
+  $('periods').innerHTML = PERIODS.map(p => {
+    const c = Math.min(d[p.k]||0, p.n);
+    return `<button type="button" class="period ${c>=p.n?'done':''}" data-p="${p.k}" aria-pressed="${p.k===period}">
+      <span class="n">${p.n}</span><span class="l">${p.l}</span><span class="c">${c>=p.n?'✓ done':`${c} of ${p.n}`}</span></button>`;
+  }).join('');
+  const P = PERIODS.find(p => p.k === period), c = Math.min(d[period]||0, P.n);
+  $('dots').innerHTML = Array.from({length:P.n}, (_,i) => `<span class="dot ${i<c?'on':''}"></span>`).join('') +
+    `<span class="eyebrow" style="align-self:center;margin-left:6px">${c} / ${P.n}</span>`;
+  $('focusPhrase').textContent = f ? f.text : 'Set an intention below, then practise it here.';
+  $('writeIn').placeholder = f ? `Write: ${f.text}` : 'Type your intention, e.g. I am healthy and at peace';
+  $('vizBtn').disabled = !f; $('editFocus').hidden = !f;
+  $('ritualMsg').textContent = complete(d) ? 'All 18 written today. Let it go and trust it.' :
+    c >= P.n ? `${P.l} done. Come back for the next round.` : 'Write it slowly. Feel it as already true.';
+
+  const act = active();
+  $('intList').innerHTML = act.length ? act.map(itemHTML).join('') :
+    `<div class="examples"><div class="empty">No intentions yet. Write your own above, or start from one of these examples:</div>
+      ${['I am calm, rested, and full of energy every morning.','I earn $8,000 a month doing work I love.','I live in a sunlit home with room for a garden.']
+        .map(t => `<button type="button" class="chip" data-example="${esc(t)}">${esc(t)}</button>`).join('')}</div>`;
+
+  const arr = state.intentions.items.filter(i => i.arrived).sort((a,b) => b.arrived.localeCompare(a.arrived));
+  $('arrList').innerHTML = arr.length ? arr.map(i => `<div class="item">
+      <div class="t">${esc(i.text)}</div>
+      <div class="acts"><button class="btn ghost small" data-act="unarrive" data-id="${i.id}">Move back</button></div>
+      <div class="meta"><span class="badge">Arrived ${fmt(i.arrived)}</span><span>${daysBetween(i.created,i.arrived)} days after setting it</span><span>${i.signs?.length||0} signs along the way</span><span class="tag">${esc(i.cat)}</span></div>
+    </div>`).join('') : `<div class="empty">When an intention comes true, mark it here. Keep the evidence.</div>`;
+
+  $('gratDate').textContent = fmt(today());
+  ['g0','g1','g2'].forEach((id,i) => { if (document.activeElement !== $(id)) $(id).value = d.g?.[i] || ''; });
+}
+function itemHTML(i){
+  const isF = focusItem()?.id === i.id, open = openSigns.has(i.id);
+  if (editing === i.id) return `<div class="item ${isF?'focus':''}" id="item-${i.id}"><form class="editbox" data-editform="${i.id}" autocomplete="off">
+    <label class="eyebrow" for="edit-${i.id}">Edit your intention</label>
+    <textarea id="edit-${i.id}">${esc(i.text)}</textarea>
+    <div class="composer-row">
+      <label for="ecat-${i.id}" hidden>Area of life</label>
+      <select id="ecat-${i.id}">${CATS.map(c => `<option${c===i.cat?' selected':''}>${c}</option>`).join('')}</select>
+      <button class="btn small" type="submit">Save</button>
+      <button class="btn ghost small" type="button" data-act="rewrite" data-id="${i.id}">Rewrite for me</button>
+      <button class="btn ghost small" type="button" data-act="cancel" data-id="${i.id}">Cancel</button>
+    </div>
+    <div class="suggest" id="esug-${i.id}"></div>
+  </form></div>`;
+  return `<div class="item ${isF?'focus':''}" id="item-${i.id}">
+    <div class="t">${esc(i.text)}</div>
+    <div class="acts">
+      ${isF ? '' : `<button class="btn ghost small" data-act="focus" data-id="${i.id}">Practise this</button>`}
+      <button class="btn ghost small" data-act="edit" data-id="${i.id}">Edit</button>
+      <button class="btn ghost small" data-act="arrive" data-id="${i.id}">It arrived</button>
+    </div>
+    <div class="meta"><span class="tag">${esc(i.cat)}</span><span>set ${fmt(i.created)}</span><span>day ${daysBetween(i.created,today())+1}</span>
+      <button class="linkish" data-act="signs" data-id="${i.id}">${i.signs?.length||0} signs ${open?'▴':'▾'}</button>
+      ${confirmDel === i.id ? `<button class="linkish" data-act="del" data-id="${i.id}">Confirm delete</button><button class="linkish" data-act="nodel">Keep</button>`
+        : `<button class="linkish" data-act="askdel" data-id="${i.id}">Delete</button>`}</div>
+    ${open ? `<div class="signs">
+      ${i.signs?.length ? `<ul>${i.signs.slice().reverse().map(s => `<li><span>${fmt(s.d)}</span>${esc(s.t)}</li>`).join('')}</ul>` : '<div class="muted" style="font-size:.9rem">Synchronicities, nudges, small wins. Note anything that points toward it.</div>'}
+      <form class="write-row" data-signform="${i.id}" autocomplete="off"><input type="text" id="sign-${i.id}" aria-label="New sign" placeholder="Saw an apartment listing on the exact street"><button class="btn small" type="submit">Add</button></form>
+    </div>` : ''}
+  </div>`;
+}
+const openSigns = new Set(); let confirmDel = null, editing = null;
+const CATS = ['Love','Money','Career','Health','Home','Self','Creativity','Other'];
+
+/* ---------- events ---------- */
+$('periods').addEventListener('click', e => { const b = e.target.closest('[data-p]'); if (!b) return; period = b.dataset.p; render(); });
+$('writeForm').addEventListener('submit', e => {
+  e.preventDefault();
+  const v = $('writeIn').value.trim(); if (!v) return;
+  let f = focusItem();
+  if (!f) { f = { id:uid(), text:v, cat:'Other', created:today(), signs:[] }; state.intentions.items.push(f); state.intentions.focus = f.id; persist('intentions'); toast('Saved as your intention'); }
+  const d = day(), P = PERIODS.find(p => p.k === period);
+  if ((d[period]||0) >= P.n) { toast(`${P.l} is complete.`); $('writeIn').value=''; return; }
+  d[period] = (d[period]||0) + 1;
+  if (d.iid !== f.id) d.iid = f.id;
+  $('writeIn').value = '';
+  persist('journal'); render(); $('writeIn').focus();
+  if (d[period] === P.n) toast(complete(d) ? 'All 18 today. Beautifully done.' : `${P.l} round complete.`);
+});
+
+$('newForm').addEventListener('submit', e => {
+  e.preventDefault();
+  const t = $('newText').value.trim(); if (!t) return;
+  const it = { id:uid(), text:t, cat:$('newCat').value, created:today(), signs:[] };
+  state.intentions.items.push(it);
+  if (!focusItem() || active().length === 1) state.intentions.focus = it.id;
+  $('newText').value = ''; $('suggest').innerHTML = '';
+  persist('intentions'); render(); toast('Intention set');
+});
+document.addEventListener('click', e => {
+  const ex = e.target.closest('[data-example]');
+  if (ex) { $('newText').value = ex.dataset.example; $('newText').focus(); return; }
+  const sg = e.target.closest('[data-suggest]');
+  if (sg) { const tgt = sg.closest('[data-editform]') ? $('edit-'+sg.closest('[data-editform]').dataset.editform) : $('newText'); tgt.value = sg.dataset.suggest; tgt.focus(); return; }
+  const b = e.target.closest('[data-act]'); if (!b) return;
+  const it = state.intentions.items.find(i => i.id === b.dataset.id);
+  switch (b.dataset.act) {
+    case 'focus': state.intentions.focus = it.id; persist('intentions'); toast('Now practising this one'); break;
+    case 'arrive': it.arrived = today(); if (state.intentions.focus === it.id) state.intentions.focus = null; persist('intentions'); toast('Marked as arrived. Say thank you.'); break;
+    case 'unarrive': delete it.arrived; persist('intentions'); break;
+    case 'signs': openSigns.has(it.id) ? openSigns.delete(it.id) : openSigns.add(it.id); render(); if (openSigns.has(it.id)) $('sign-'+it.id)?.focus(); return;
+    case 'edit': editing = it.id; render(); $('edit-'+it.id)?.focus(); return;
+    case 'cancel': editing = null; break;
+    case 'rewrite': { const raw = $('edit-'+it.id).value.trim(); runRewrite(raw, $('esug-'+it.id), b, 'Rewrite for me'); return; }
+    case 'askdel': confirmDel = it.id; break;
+    case 'nodel': confirmDel = null; break;
+    case 'del': state.intentions.items = state.intentions.items.filter(i => i !== it); confirmDel = null; persist('intentions'); toast('Deleted'); break;
+  }
+  render();
+});
+document.addEventListener('submit', e => {
+  const ef = e.target.closest('[data-editform]');
+  if (ef) {
+    e.preventDefault();
+    const it = state.intentions.items.find(i => i.id === ef.dataset.editform), t = $('edit-'+it.id).value.trim();
+    if (!t) { toast('Write something before saving'); return; }
+    it.text = t; it.cat = $('ecat-'+it.id).value; editing = null;
+    persist('intentions'); render(); toast('Intention updated'); return;
+  }
+  const f = e.target.closest('[data-signform]'); if (!f) return;
+  e.preventDefault();
+  const id = f.dataset.signform, inp = $('sign-'+id), t = inp.value.trim(); if (!t) return;
+  const it = state.intentions.items.find(i => i.id === id);
+  (it.signs ||= []).push({ d:today(), t });
+  persist('intentions'); render(); $('sign-'+id)?.focus(); toast('Sign noted');
+});
+let gT;
+['g0','g1','g2'].forEach((id,i) => $(id).addEventListener('input', () => {
+  day().g ||= ['','','']; day().g[i] = $(id).value;
+  clearTimeout(gT); gT = setTimeout(() => persist('journal'), 700);
+}));
+
+/* visualise */
+let vizTimer, vizEnd;
+$('editFocus').addEventListener('click', () => {
+  const f = focusItem(); if (!f) return;
+  editing = f.id; render();
+  $('item-'+f.id)?.scrollIntoView({block:'center', behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth'});
+  $('edit-'+f.id)?.focus({preventScroll:true});
+});
+$('vizBtn').addEventListener('click', () => {
+  const f = focusItem(); if (!f) return;
+  $('vizPhrase').textContent = f.text; $('viz').hidden = false; $('vizClose').focus();
+  vizEnd = Date.now() + 60000;
+  const tick = () => {
+    const left = Math.ceil((vizEnd - Date.now())/1000);
+    if (left <= 0) { closeViz(); toast('Done. Carry that feeling with you.'); return; }
+    const inPhase = Math.floor((60 - left) / 4) % 2 === 0;
+    $('vizCue').textContent = `${inPhase ? 'Breathe in' : 'Breathe out'} · ${left}s`;
+  };
+  tick(); vizTimer = setInterval(tick, 250);
+});
+function closeViz(){ clearInterval(vizTimer); $('viz').hidden = true; $('vizBtn').focus(); }
+$('vizClose').addEventListener('click', closeViz);
+document.addEventListener('keydown', e => { if (e.key === 'Escape' && !$('viz').hidden) closeViz(); });
+
+/* Rewriting: Claude when available, built-in rules otherwise */
+let samplePromise = window.claude?.use ? claude.use('sample') : Promise.resolve(null);
+function localRewrite(raw){
+  let t = raw.replace(/\s+/g,' ').trim().replace(/[.!]+$/,'');
+  const rules = [
+    [/^i\s+(really\s+)?(want|wish|hope|would like|need)\s+to\s+be\b/i, 'I am'],
+    [/^i\s+(really\s+)?(want|wish|hope|would like|need)\s+to\b/i, 'I now'],
+    [/^i\s+(really\s+)?(want|wish for|hope for|would like|need)\b/i, 'I have'],
+    [/^i\s+wish\s+(that\s+)?i\s+(was|were)\b/i, 'I am'],
+    [/^i\s+wish\s+(that\s+)?i\s+had\b/i, 'I have'],
+    [/^i\s+(will|shall|am going to|'m going to|’m going to)\s+be\b/i, 'I am'],
+    [/^i\s+(will|shall|am going to|'m going to|’m going to)\b/i, 'I'],
+    [/^i\s+(hope|wish)\s+(that\s+)?/i, ''],
+    [/^(please\s+)?(let|may)\s+me\s+/i, 'I '],
+  ];
+  for (const [re, to] of rules) if (re.test(t)) { t = t.replace(re, to).trim(); break; }
+  t = t.replace(/\bsomeday\b|\bone day\b|\bsoon\b|\bin the future\b/gi,'now').replace(/\s+/g,' ').trim();
+  if (!/^(i|my|we|our)\b/i.test(t)) t = 'I have ' + t.charAt(0).toLowerCase() + t.slice(1);
+  t = t.charAt(0).toUpperCase() + t.slice(1);
+  const lower = /^I\b/.test(t) ? t : t.charAt(0).toLowerCase() + t.slice(1);
+  return [t + '.', 'I am so grateful that ' + lower + '.', 'With ease and joy, ' + lower + '.'];
+}
+async function getRewrites(raw){
+  const sample = await samplePromise;
+  if (sample) {
+    try {
+      const out = await sample.json(`Rewrite this wish as three manifestation affirmations. Rules: first person, present tense as if already true, positive (no "not", "no longer", "want"), specific and sensory, one sentence each, under 20 words. Keep the person's own details and language. Return JSON only: {"options":["...","...","..."]}.\n\nWish: ${raw}`, { modelTier:'quick' });
+      const opts = (out && Array.isArray(out.options) ? out.options : []).filter(x => typeof x === 'string' && x.trim()).slice(0,3);
+      if (opts.length) return opts;
+    } catch (e) { if (e && e.code === 'not_granted') samplePromise = Promise.resolve(null); }
+  }
+  return localRewrite(raw);
+}
+async function runRewrite(raw, box, btn, label){
+  if (!raw) { box.innerHTML = '<div class="muted" style="font-size:.9rem">Write a rough wish first, like "I want a better job".</div>'; return; }
+  btn.disabled = true; btn.textContent = 'Rewriting…';
+  const opts = await getRewrites(raw);
+  box.innerHTML = `<div class="eyebrow">Tap one to use it, then adjust the words if you like</div>` + opts.map(o => `<button type="button" class="chip" data-suggest="${esc(o)}">${esc(o)}</button>`).join('');
+  btn.disabled = false; btn.textContent = label;
+}
+$('shapeBtn').addEventListener('click', () => runRewrite($('newText').value.trim(), $('suggest'), $('shapeBtn'), 'Rewrite for me'));
+
+moon(); render(); connect();
+matchMedia('(prefers-color-scheme: dark)').addEventListener?.('change', moon);
+new MutationObserver(moon).observe(document.documentElement, {attributes:true, attributeFilter:['data-theme']});
+setInterval(() => { if (render.k !== today()) { render.k = today(); render(); moon(); } }, 60000); render.k = today();
+})();
+</script>
+
+</body>
+</html>
